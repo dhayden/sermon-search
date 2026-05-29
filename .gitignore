@@ -1,0 +1,19 @@
+# .NET
+api/bin/
+api/obj/
+api/*.user
+appsettings.Development.json
+appsettings.local.json
+
+# React
+web/node_modules/
+web/dist/
+
+# Secrets
+.env
+*.env
+
+# Misc
+.DS_Store
+Thumbs.db
+.vs/
