@@ -24,6 +24,12 @@ public class PdfIndexService
 
     public string StoragePath => _storageDir;
 
+    public List<(int Page, string Text)>? GetDocumentPages(string fileName)
+    {
+        var filePath = Path.Combine(_storageDir, fileName);
+        return File.Exists(filePath) ? ExtractPages(filePath) : null;
+    }
+
     public async Task<PdfDocument> SaveAndIndexAsync(IFormFile file)
     {
         // Save file to disk (skip write if already there, e.g. bulk-indexed from folder)

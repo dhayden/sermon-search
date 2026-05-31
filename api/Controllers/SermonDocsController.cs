@@ -108,6 +108,20 @@ public class SermonDocsController : ControllerBase
         return Ok(new { message = $"Queued {newFiles.Count} PDF(s) for background indexing.", queued = newFiles.Count });
     }
 
+    // GET /api/sermon-docs/5/pages
+    [Authorize(Policy = "AnyRole")]
+    [HttpGet("{id:int}/pages")]
+    public async Task<IActionResult> GetPages(int id)
+    {
+        var doc = await _db.PdfDocuments.FindAsync(id);
+        if (doc == null) return NotFound();
+
+        var pages = _indexer.GetDocumentPages(doc.FileName);
+        if (pages == null) return NotFound(new { message = "PDF file not found on disk." });
+
+        return Ok(pages.Select(p => new SermonPageDto(p.Page, p.Text)));
+    }
+
     // DELETE /api/sermon-docs/5
     [Authorize(Policy = "AdminOnly")]
     [HttpDelete("{id:int}")]
